@@ -1,0 +1,42 @@
+
+<!doctype html>
+<html lang="sq">
+<head>
+  <meta charset="UTF-8">
+  <title>DUAeSIM – Teste</title>
+  <style>
+    body { font-family: sans-serif; background: #fff0f6; color: #111; padding: 20px; }
+    h2 { color: #ff007f; text-align: center; }
+    .plans { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 30px; }
+    .plan { background: white; border-radius: 8px; padding: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.05); }
+    .plan button { background: #ff007f; color: white; padding: 10px; border: none; border-radius: 5px; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Planet eSIM (Test)</h2>
+  <div id="plans" class="plans"></div>
+
+  <script>
+    fetch("/.netlify/functions/get-plans")
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("plans");
+        data.plans.forEach(plan => {
+          const div = document.createElement("div");
+          div.className = "plan";
+          div.innerHTML = `
+            <h3>${plan.name}</h3>
+            <p><strong>Data:</strong> ${plan.data}</p>
+            <p><strong>Çmimi:</strong> ${plan.price} ${plan.currency}</p>
+            <button>Zgjidh</button>
+          `;
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        document.getElementById("plans").innerHTML = "<p style='color:red;'>Gabim në ngarkim të planeve.</p>";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
